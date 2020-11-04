@@ -192,3 +192,129 @@ mysql> SELECT * FROM emp1;
 |    41 |
 +------+
 8 rows in set (0.00 sec)
+
+
+
+Procedures:
+
+1)mysql> CREATE PROCEDURE citycount (IN country CHAR(3), OUT cities INT)
+       BEGIN
+       SELECT COUNT(*) INTO cities FROM world.city
+       WHERE CountryCode = country;
+       END//
+Query OK, 0 rows affected (0.01 sec)
+
+2)mysql> delimiter ;
+mysql> CALL citycount('JPN',cities);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> SELECT cities;
++---------+
+| @cities |
++---------+
+|     248 |
++---------+
+1 row in set (0.00 sec)
+
+3)mysql> CALL citycount('fra',cities);
+Query OK, 1 row affected (0.00 sec)
+
+4)mysql> SELECT cities;
++---------+
+| @cities |
++---------+
+|      40 |
++---------+
+1 row in set (0.00 sec)
+
+5)mysql> create table FindmanagerById(MID int,name varchar(20));
+    -> /
+Query OK, 0 rows affected (1.99 sec)
+
+6)mysql> delimiter /
+mysql> create procedure FindmanagerById(IN MID INT)
+    -> BEGIN
+    -> SELECT * FROM manager where id=MID;
+    -> end;
+    -> /
+Query OK, 0 rows affected (1.46 sec)
+Exec [dbo].[GETBook];
+
+7)mysql> create table FindpraById(pID int,name varchar(20));
+    -> /
+Query OK, 0 rows affected (1.99 sec)
+
+8)mysql> delimiter /
+9)mysql> create procedure FindpraById(IN pID INT)
+    -> BEGIN
+    -> SELECT * FROM pra where id=praID;
+    -> end;
+    -> /
+Query OK, 0 rows affected (1.46 sec)
+Exec [dbo].[GETBook];
+
+create table pen1(penID int primary key,
+penName varchar(100),
+Category varchar(100),
+Price int);
+
+select * from Book1;
+penID  penName Category Price
+1	 abcd	  abc	  890
+2	 efgth	  bca	  990
+3	 qwer	  tech	  1000
+4	 rtyu	  dba	  780
+5	 yt	  mega	  1078
+
+create procedure Getpens
+ as
+ begin
+ select * from pen1
+ end
+ go
+
+Exec [dbo].[Getpens];
+
+USE [idg.com]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GetBooks]    Script Date: 3-11-20 16:05:30 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+ALTER procedure [dbo].[Getpens](
+@Category varchar(100)
+)
+ as
+ begin
+ select * from pens1 where [Category] =@Category
+ end
+GO
+penID  penName Category Price
+1	 abcd	 abc	  890
+2	 efgth	 bca	  990
+3	 qwer	 tech	  1000
+4	 rtyu	 dba	  780
+5	 yt	 mega	  1078
+
+Exec [dbo].[Getpens] @Category='mega';
+
+penID penName Category Price
+5	yt	mega	1078
+
+Exec [dbo].[Getpens] @Category='dba';
+
+penID  penName Category Price
+4	 rtyu	 dba	  780
+
+Exec [dbo].[GetBooks] @Category='tech';
+
+penID  penName Category Price
+3	 qwer	 tech	  1000
+Exec [dbo].[GetBooks] @Category='abc';
+
+penID  penName Category Price
+1	 abcd	 abc	  890
